@@ -10,7 +10,7 @@ const readFile = promisify(fs.readFile)
 
 const mdToHtml = remark().use(remarkHtml)
 
-interface MarkdownMetaData {
+export interface MarkdownMetaData {
   companyName: string
   companyUrl: string
   clientName: string
@@ -19,7 +19,7 @@ interface MarkdownMetaData {
   endDate?: string
 }
 
-interface MarkdownFile {
+export interface MarkdownFile {
   content: string
   data: MarkdownMetaData
 }
@@ -27,7 +27,7 @@ interface MarkdownFile {
 export class MarkdownService {
   private markdownPath: string
   constructor() {
-    this.markdownPath = resolve(__dirname, '../markdown')
+    this.markdownPath = resolve('markdown')
   }
 
   async getMarkdownFiles(): Promise<Array<MarkdownFile>> {
@@ -48,6 +48,7 @@ export class MarkdownService {
       matterResults.map(async (matterResult: MarkdownFile) => {
         const htmlContent = await mdToHtml.process(matterResult.content)
 
+        console.log(matterResult.data)
         return {
           content: htmlContent.contents as string,
           data: matterResult.data,
